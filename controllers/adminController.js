@@ -7,10 +7,12 @@ const getDashboard = (req, res) => {
     try {
         const users = UserModel.readUsers();
 
-        // Return users without passwords
+        // Return users without passwords (NEVER expose passwords!)
         const safeUsers = users.map(u => ({
             email: u.email,
-            role: u.role || 'user',
+            role: u.role || 'ROLE_CUSTOMER',
+            myReferralCode: u.myReferralCode || '-',
+            rewardBalance: u.rewardBalance || 0,
             createdAt: u.createdAt
         }));
 
