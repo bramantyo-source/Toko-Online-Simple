@@ -325,5 +325,5 @@ MIT License © 2026
 ---
 
 <p align="center">
-  Made with ❤️ for Web Security Class
+  Made by Rafael & Fatih for Web Security Class
 </p>
