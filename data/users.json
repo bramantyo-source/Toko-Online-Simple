@@ -1,1 +1,29 @@
-[]
+[
+  {
+    "email": "testprofile@example.com",
+    "password": "$2b$12$p36.3Yk3nd5mj/A2EXqHU.7plJM4NBSd6qkZasTBdqkUeERBTOHQ.",
+    "role": "ROLE_CUSTOMER",
+    "myReferralCode": "A1B2C3",
+    "referredBy": null,
+    "rewardBalance": 0,
+    "createdAt": "2026-01-10T14:31:05.565Z"
+  },
+  {
+    "email": "admin@lapaksimpel.com",
+    "password": "$2b$12$RZ/lTF7KCxVRHlGFOQyE/uwWKqUzQuFV6gxhmwhYv.u8XiekCqw32",
+    "role": "ROLE_ADMIN",
+    "myReferralCode": "ADMIN1",
+    "referredBy": null,
+    "rewardBalance": 0,
+    "createdAt": "2026-01-15T01:30:00.000Z"
+  },
+  {
+    "email": "customer@example.com",
+    "password": "$2b$12$W64nOIY3BLwBUAxle4yTFO.PtmNRuIRYzIXUk6ofpWdoXPZgp8iGe",
+    "role": "ROLE_CUSTOMER",
+    "myReferralCode": "D4E5F6",
+    "referredBy": null,
+    "rewardBalance": 0,
+    "createdAt": "2026-01-11T18:46:35.770Z"
+  }
+]

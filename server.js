@@ -1,41 +1,115 @@
+// Load environment variables
+require('dotenv').config();
+
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
+const helmet = require('helmet');
+
+const cookieParser = require('cookie-parser');
+
+// Import routes
+const authRoutes = require('./routes/authRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+
+// Import middleware
+const { authenticateToken, authorizeRole } = require('./middleware/authMiddleware');
+const { generateCsrfToken, validateCsrfToken } = require('./middleware/csrfMiddleware');
+const adminController = require('./controllers/adminController');
+
 const app = express();
 
-app.use(express.json()); // Supaya server bisa membaca data JSON dari frontend
-app.use(express.static('public')); // Melayani file HTML dari folder public
+// ============================================
+// SECURITY MIDDLEWARE
+// ============================================
 
-const DB_PATH = './data/users.json';
+// 1. Security Headers dengan Helmet
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com"],
+            scriptSrcAttr: ["'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+            fontSrc: ["'self'", "https://fonts.gstatic.com"],
+            imgSrc: ["'self'", "data:", "https:"],
+        },
+    },
+    crossOriginEmbedderPolicy: false,
+}));
 
-// Fungsi bantu untuk membaca data dari file JSON
-const readUsers = () => JSON.parse(fs.readFileSync(DB_PATH));
+// ============================================
+// BASIC MIDDLEWARE
+// ============================================
 
-// ROUTE 1: Registrasi User Baru
-app.post('/api/register', (req, res) => {
-    const { email, password } = req.body;
-    const users = readUsers();
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.static('public'));
 
-    if (users.find(u => u.email === email)) {
-        return res.status(400).json({ success: false, message: "Email sudah ada!" });
+// ============================================
+// CSRF PROTECTION
+// ============================================
+
+// Endpoint to get CSRF token
+app.get('/api/csrf-token', generateCsrfToken);
+
+// Apply CSRF validation to all POST/PUT/DELETE requests
+// Note: You can enable this globally by uncommenting:
+// app.use('/api', validateCsrfToken);
+
+// ============================================
+// ROUTES
+// ============================================
+
+// Auth routes: /api/register, /api/login, /api/profile
+app.use('/api', authRoutes);
+
+// Order routes: /api/checkout
+app.use('/api', orderRoutes);
+
+// Admin routes: /admin/* (protected with role-based auth)
+app.use('/admin', adminRoutes);
+
+// Management Orders route (protected - admin only)
+app.get('/management-orders', authenticateToken, authorizeRole('admin'), adminController.getManagementOrders);
+
+// ============================================
+// CUSTOM 404 ERROR PAGE
+// ============================================
+
+// This must be the LAST route - catches all unmatched routes
+app.use((req, res) => {
+    // For API routes, return JSON
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({
+            success: false,
+            message: "Endpoint tidak ditemukan"
+        });
     }
-
-    users.push({ email, password });
-    fs.writeFileSync(DB_PATH, JSON.stringify(users, null, 2));
-    res.json({ success: true, message: "Berhasil daftar! Silakan login." });
+    // For other routes, serve custom 404 page
+    res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
 });
 
-// ROUTE 2: Login User
-app.post('/api/login', (req, res) => {
-    const { email, password } = req.body;
-    const users = readUsers();
+// ============================================
+// SERVER START
+// ============================================
 
-    const userFound = users.find(u => u.email === email && u.password === password);
-    if (userFound) {
-        res.json({ success: true, message: "Login berhasil!" });
-    } else {
-        res.status(401).json({ success: false, message: "Email atau password salah!" });
-    }
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`✅ Server berjalan di http://localhost:${PORT}`);
+    console.log('🔒 Security features aktif:');
+    console.log('   - Password hashing (bcrypt)');
+    console.log('   - Password validation (min 8 char + special char)');
+    console.log('   - Rate limiting (5 req/15 min)');
+    console.log('   - Security headers (Helmet)');
+    console.log('   - Input validation');
+    console.log('   - Role-based access control (RBAC)');
+    console.log('   - CSRF protection ready');
+    console.log('   - Custom 404 error page');
+    console.log('');
+    console.log('📁 MVC Structure:');
+    console.log('   - controllers/');
+    console.log('   - models/');
+    console.log('   - routes/');
+    console.log('   - middleware/');
 });
-
-app.listen(3000, () => console.log('Server lari di http://localhost:3000'));

@@ -148,16 +148,16 @@
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-slate-50 via-white to-indigo-50 min-h-screen">
+<body class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 min-h-screen">
 
     <!-- Decorative background elements -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
         <div
-            class="absolute top-20 left-10 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 float-animation">
+            class="absolute top-20 left-10 w-72 h-72 bg-indigo-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 float-animation">
         </div>
-        <div class="absolute top-40 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 float-animation"
+        <div class="absolute top-40 right-10 w-72 h-72 bg-fuchsia-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 float-animation"
             style="animation-delay: 1s;"></div>
-        <div class="absolute bottom-20 left-1/2 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 float-animation"
+        <div class="absolute bottom-20 left-1/2 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-40 float-animation"
             style="animation-delay: 2s;"></div>
     </div>
 
@@ -187,7 +187,7 @@
             </div>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-3" id="navAuth">
             <button onclick="toggleAuth('login')"
                 class="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors">
                 Masuk
@@ -202,12 +202,21 @@
     <!-- Main Content -->
     <main id="mainPage" class="max-w-7xl mx-auto px-6 py-10">
         <!-- Hero Section -->
-        <div class="text-center mb-12">
-            <span class="inline-block px-4 py-1.5 bg-primary-50 text-primary-600 rounded-full text-sm font-medium mb-4">
+        <div class="text-center mb-12 relative">
+            <div
+                class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-gradient-to-r from-indigo-200/50 via-purple-200/50 to-pink-200/50 blur-3xl -z-10 rounded-full">
+            </div>
+            <span
+                class="inline-block px-4 py-1.5 bg-white/80 backdrop-blur-sm border border-indigo-100 text-indigo-600 rounded-full text-sm font-bold mb-4 shadow-sm">
                 ✨ Belanja Hemat & Mudah
             </span>
-            <h2 class="text-4xl font-bold text-gray-800 mb-3">Koleksi Produk Terbaik</h2>
-            <p class="text-gray-500 max-w-md mx-auto">Temukan berbagai produk berkualitas dengan harga terjangkau</p>
+            <h2 class="text-5xl font-bold mb-3 tracking-tight">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
+                    Koleksi Produk Terbaik
+                </span>
+            </h2>
+            <p class="text-gray-600 max-w-lg mx-auto text-lg leading-relaxed">Temukan berbagai produk berkualitas dengan
+                harga mahasiswa yang pas dikantong.</p>
         </div>
 
         <!-- Filter Categories -->
@@ -240,8 +249,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-gray-100 mt-16 py-8 text-center text-gray-400 text-sm">
-        <p>© 2026 LapakSimpel. Dibuat dengan ❤️ untuk belanja yang lebih mudah.</p>
+    <footer
+        class="border-t border-indigo-100 bg-white/50 backdrop-blur-sm mt-16 py-8 text-center text-gray-500 text-sm">
+        <p class="font-medium">© 2026 LapakSimpel. Dibuat untuk Tugas Kuliah Keamanan Web.</p>
     </footer>
 
     <!-- Auth Modal -->
@@ -273,6 +283,12 @@
                         class="w-full border border-gray-200 p-3 rounded-xl focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 outline-none transition-all input-glow"
                         required>
                 </div>
+                <!-- Repeat Password Field (Hidden in Login Mode) -->
+                <div id="repeatPasswordContainer" class="hidden">
+                    <label class="block text-sm font-medium text-gray-700 mb-1.5">Ulangi Password</label>
+                    <input type="password" id="repeatPassword" placeholder="••••••••"
+                        class="w-full border border-gray-200 p-3 rounded-xl focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 outline-none transition-all input-glow">
+                </div>
                 <button type="submit"
                     class="btn-shine w-full bg-gradient-to-r from-primary-500 to-purple-600 text-white py-3 rounded-xl font-semibold shadow-lg shadow-primary-500/25 hover:shadow-xl transition-all mt-2">
                     <span id="authBtnText">Masuk</span>
@@ -301,6 +317,62 @@
         </div>
     </div>
 
+    <!-- Product Detail Modal -->
+    <div id="productModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="modal-enter bg-white rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden">
+            <div class="relative h-64 flex items-center justify-center overflow-hidden" id="modalHeaderColor">
+                <span class="text-8xl transform hover:scale-110 transition-transform duration-500 cursor-default"
+                    id="modalIcon">📦</span>
+                <button onclick="closeProductModal()"
+                    class="absolute top-4 right-4 w-10 h-10 bg-black/20 hover:bg-black/40 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-8">
+                <div class="flex items-start justify-between mb-4">
+                    <div>
+                        <span
+                            class="inline-block px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-semibold tracking-wide uppercase mb-2"
+                            id="modalCategory">Kategori</span>
+                        <h2 class="text-3xl font-bold text-gray-800 leading-tight" id="modalTitle">Nama Produk</h2>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-2xl font-bold text-primary-600" id="modalPrice">Rp 0</p>
+                    </div>
+                </div>
+
+                <p class="text-gray-600 leading-relaxed mb-8">
+                    Nikmati kualitas terbaik dengan produk pilihan kami. Dibuat dengan bahan premium untuk kepuasan Anda
+                    maksimal. Stok terbatas, segera pesan sebelum kehabisan!
+                </p>
+
+                <div class="flex gap-4">
+                    <button onclick="handleCheckout()"
+                        class="flex-1 bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 transition-all flex items-center justify-center gap-2 group">
+                        <span>Beli Sekarang</span>
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </button>
+                    <button
+                        class="p-4 rounded-xl border-2 border-gray-100 hover:border-gray-200 text-gray-400 hover:text-red-500 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast" class="fixed bottom-6 right-6 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
         <div class="bg-white rounded-2xl shadow-2xl px-6 py-4 flex items-center gap-3 border border-gray-100">
@@ -315,22 +387,24 @@
     <script>
         // Product Data with icons
         const products = [
-            { name: "Kopi Gayo", price: "Rp 50.000", category: "Minuman", icon: "☕", color: "from-amber-400 to-orange-500" },
-            { name: "Kaos Polos", price: "Rp 75.000", category: "Pakaian", icon: "👕", color: "from-blue-400 to-indigo-500" },
-            { name: "Sepatu Kanvas", price: "Rp 250.000", category: "Sepatu", icon: "👟", color: "from-emerald-400 to-teal-500" },
-            { name: "Tas Ransel", price: "Rp 180.000", category: "Aksesoris", icon: "🎒", color: "from-purple-400 to-pink-500" },
-            { name: "Kopi Luwak", price: "Rp 150.000", category: "Minuman", icon: "☕", color: "from-amber-400 to-orange-500" },
-            { name: "Jaket Hoodie", price: "Rp 200.000", category: "Pakaian", icon: "🧥", color: "from-slate-400 to-gray-600" },
-            { name: "Sneakers Pro", price: "Rp 350.000", category: "Sepatu", icon: "👟", color: "from-red-400 to-rose-500" },
-            { name: "Topi Baseball", price: "Rp 85.000", category: "Aksesoris", icon: "🧢", color: "from-sky-400 to-blue-500" }
+            { name: "Kopi Gayo", price: "Rp 50.000", category: "Minuman", icon: "☕", color: "from-amber-400 to-orange-500", desc: "Kopi arabika asli Gayo dengan aroma kuat dan rasa yang nikmat. Cocok untuk menemani pagi hari Anda." },
+            { name: "Kaos Polos", price: "Rp 75.000", category: "Pakaian", icon: "👕", color: "from-blue-400 to-indigo-500", desc: "Kaos berbahan katun combed 30s yang adem dan nyaman dipakai sehari-hari. Tersedia berbagai ukuran." },
+            { name: "Sepatu Kanvas", price: "Rp 250.000", category: "Sepatu", icon: "👟", color: "from-emerald-400 to-teal-500", desc: "Sepatu casual dengan desain trendy dan sol karet yang empuk. Nyaman untuk jalan-jalan santai." },
+            { name: "Tas Ransel", price: "Rp 180.000", category: "Aksesoris", icon: "🎒", color: "from-purple-400 to-pink-500", desc: "Tas ransel multifungsi dengan kompartemen laptop. Kuat, stylish, dan tahan air." },
+            { name: "Kopi Luwak", price: "Rp 150.000", category: "Minuman", icon: "☕", color: "from-amber-400 to-orange-500", desc: "Kopi luwak premium dengan cita rasa yang khas dan lembut. Pengalaman ngopi yang tak terlupakan." },
+            { name: "Jaket Hoodie", price: "Rp 200.000", category: "Pakaian", icon: "🧥", color: "from-slate-400 to-gray-600", desc: "Jaket hoodie tebal namun tidak panas. Desain minimalis yang cocok dipadukan dengan outfit apapun." },
+            { name: "Sneakers Pro", price: "Rp 350.000", category: "Sepatu", icon: "👟", color: "from-red-400 to-rose-500", desc: "Sneakers olahraga dengan teknologi cushioning terbaru. Ringan dan memberikan support maksimal." },
+            { name: "Topi Baseball", price: "Rp 85.000", category: "Aksesoris", icon: "🧢", color: "from-sky-400 to-blue-500", desc: "Topi baseball dengan jahitan rapi dan bahan berkualitas. Melindungi dari panas matahari dengan gaya." }
         ];
 
         const container = document.getElementById('productContainer');
         const searchInput = document.getElementById('search');
         let activeCategory = 'all';
+        let filteredProducts = products;
 
         // Render products with enhanced cards
         function renderProducts(dataFiltered) {
+            filteredProducts = dataFiltered;
             container.innerHTML = '';
 
             if (dataFiltered.length === 0) {
@@ -350,7 +424,7 @@
 
             dataFiltered.forEach((p, index) => {
                 container.innerHTML += `
-                    <div class="product-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group cursor-pointer" style="animation-delay: ${index * 50}ms">
+                    <div onclick="showProductDetail(${index})" class="product-card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden group cursor-pointer" style="animation-delay: ${index * 50}ms">
                         <div class="h-40 bg-gradient-to-br ${p.color} flex items-center justify-center relative overflow-hidden">
                             <span class="text-5xl group-hover:scale-110 transition-transform duration-300">${p.icon}</span>
                             <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -371,6 +445,32 @@
                 `;
             });
         }
+
+        // Product Modal Logic
+        function showProductDetail(index) {
+            const product = filteredProducts[index];
+            const modal = document.getElementById('productModal');
+
+            // Set Content
+            document.getElementById('modalTitle').innerText = product.name;
+            document.getElementById('modalPrice').innerText = product.price;
+            document.getElementById('modalCategory').innerText = product.category;
+            document.getElementById('modalIcon').innerText = product.icon;
+            document.getElementById('modalHeaderColor').className = `relative h-64 flex items-center justify-center overflow-hidden bg-gradient-to-br ${product.color}`;
+
+            // Show Modal
+            modal.classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.add('hidden');
+        }
+
+        // Close modal on backdrop click
+        document.getElementById('productModal').addEventListener('click', (e) => {
+            if (e.target.id === 'productModal') closeProductModal();
+        });
+
 
         // Category filter
         function filterCategory(category) {
@@ -412,8 +512,61 @@
         // Initial render
         renderProducts(products);
 
-        // Auth Modal
+        // ==========================================
+        // AUTHENTICATION & PROFILE LOGIC
+        // ==========================================
+
         let currentMode = 'login';
+
+        // Check login status on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                updateUIToLoggedIn();
+            }
+        });
+
+        function updateUIToLoggedIn() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const navAuth = document.getElementById('navAuth');
+
+            navAuth.innerHTML = `
+                <div class="relative group">
+                    <button onclick="toggleProfileModal()" class="flex items-center gap-2 pl-2 pr-4 py-1.5 bg-white border border-gray-200 rounded-full hover:shadow-md transition-all">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+                            ${user.email ? user.email[0].toUpperCase() : 'U'}
+                        </div>
+                        <span class="text-sm font-medium text-gray-700 max-w-[100px] truncate">${user.email.split('@')[0]}</span>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Dropdown Menu -->
+                    <div class="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden hidden group-hover:block z-50 transform origin-top-right transition-all">
+                        <div class="p-4 border-b border-gray-50 bg-gray-50/50">
+                            <p class="text-xs text-gray-500">Login sebagai</p>
+                            <p class="text-sm font-semibold text-gray-800 truncate">${user.email}</p>
+                        </div>
+                        <button onclick="handleLogout()" class="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                            Keluar
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.reload();
+        }
+
+        function toggleProfileModal() {
+            // Dropdown handles this via CSS hover, but for mobile we might want explicit toggle
+            // For now CSS hover is sufficient for desktop
+        }
 
         function toggleAuth(mode) {
             currentMode = mode;
@@ -428,15 +581,97 @@
                 subtitle.innerText = 'Masuk ke akun kamu';
                 btnText.innerText = 'Masuk';
                 switchText.innerHTML = 'Belum punya akun? <button onclick="toggleAuth(\'signup\')" class="text-primary-600 font-semibold hover:underline">Daftar sekarang</button>';
+
+                // Hide Repeat Password field
+                document.getElementById('repeatPasswordContainer').classList.add('hidden');
+                document.getElementById('repeatPassword').required = false;
             } else {
                 title.innerText = 'Buat Akun Baru';
                 subtitle.innerText = 'Daftar gratis dan mulai belanja';
                 btnText.innerText = 'Daftar';
                 switchText.innerHTML = 'Sudah punya akun? <button onclick="toggleAuth(\'login\')" class="text-primary-600 font-semibold hover:underline">Masuk</button>';
+
+                // Show Repeat Password field
+                document.getElementById('repeatPasswordContainer').classList.remove('hidden');
+                document.getElementById('repeatPassword').required = true;
             }
 
             modal.classList.remove('hidden');
         }
+
+        // Handle Checkout Logic
+        async function handleCheckout() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showToast('error', 'Login Diperlukan', 'Silakan login terlebih dahulu untuk berbelanja.');
+                toggleAuth('login');
+                closeProductModal();
+                return;
+            }
+
+            // Proceed to API logic (later)
+            try {
+                const res = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({
+                        productId: 123, // Placeholder for selected product logic
+                        amount: 50000
+                    })
+                });
+
+                if (res.status === 401) {
+                    showToast('error', 'Sesi Berakhir', 'Silakan login kembali.');
+                    handleLogout();
+                    return;
+                }
+
+                const data = await res.json();
+                if (res.ok) {
+                    showToast('success', 'Pesanan Diterima', 'Terima kasih! Pesanan Anda sedang diproses.');
+                    closeProductModal();
+                } else {
+                    showToast('error', 'Gagal', data.message);
+                }
+            } catch (err) {
+                showToast('error', 'Error', 'Gagal memproses pesanan');
+            }
+        }
+
+        // COOKIE LOGIC FOR REFERRAL
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                let date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax";
+        }
+
+        function getCookie(name) {
+            let nameEQ = name + "=";
+            let ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Capture Referral from URL
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref');
+            if (refCode) {
+                setCookie('partner_code', refCode, 30);
+                console.log('Referral Captured:', refCode);
+            }
+        });
 
         function closeModal() {
             document.getElementById('authModal').classList.add('hidden');
@@ -472,8 +707,32 @@
         // Form submission
         document.getElementById('authForm').onsubmit = async (e) => {
             e.preventDefault();
+            const btn = document.querySelector('button[type="submit"]');
+            const btnText = document.getElementById('authBtnText');
+            const originalText = btnText.innerText;
+
+            // Set Loading State
+            btn.disabled = true;
+            btnText.innerHTML = `
+                <svg class="animate-spin -ml-1 mr-2 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Memproses...
+            `;
+
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const repeatPassword = document.getElementById('repeatPassword').value;
+
+            // Password Match Validation
+            if (currentMode !== 'login' && password !== repeatPassword) {
+                showToast('error', 'Validasi Gagal', 'Password dan Ulangi Password tidak sama!');
+                btn.disabled = false;
+                btnText.innerText = originalText;
+                return;
+            }
+
             const url = currentMode === 'login' ? '/api/login' : '/api/register';
 
             try {
@@ -488,11 +747,29 @@
                     showToast('success', currentMode === 'login' ? 'Login Berhasil!' : 'Pendaftaran Berhasil!', data.message);
                     closeModal();
                     document.getElementById('authForm').reset();
+
+                    // IF LOGIN, SAVE TOKEN & UPDATE UI
+                    if (currentMode === 'login' && data.token) {
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        // Redirect to profile page
+                        setTimeout(() => {
+                            window.location.href = '/profile.html';
+                        }, 1000);
+                    } else if (currentMode !== 'login') {
+                        // Switch to login after register
+                        setTimeout(() => toggleAuth('login'), 1500);
+                    }
                 } else {
                     showToast('error', 'Gagal', data.message);
                 }
             } catch (err) {
+                console.error(err);
                 showToast('error', 'Error', 'Gagal menghubungi server');
+            } finally {
+                // Reset Loading State
+                btn.disabled = false;
+                btnText.innerText = originalText;
             }
         };
 
@@ -503,7 +780,10 @@
 
         // Close modal on Escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
+            if (e.key === 'Escape') {
+                closeModal();
+                closeProductModal();
+            }
         });
     </script>
 </body>
